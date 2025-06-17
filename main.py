@@ -22,14 +22,24 @@ def save_data(data):
         json.dump(data, f, ensure_ascii=False, indent=4)
 
 class FinanceApp:
-    def __init__(self, root):
+    def __init__(self, root, user):
         self.root = root
         self.root.title("FinanceApp")
         self.root.geometry("280x200")
         self.root.configure(bg="#2e2e2e")
-        self.data = load_data()
+        self.all_users = self.load_users()
+        self.user = user
+        self.data = self.all_users[self.user]
         self.setup_ui()
-
+    def load_users(self):
+        if os.path.exists(USERS_DATA):
+            with open(USERS_DATA, 'r', encoding="utf-8") as file:
+                return json.load(file)
+        return {}
+    def save_user_data(self):
+        self.all_users[self.user] = self.data
+        with open(USERS_DATA, 'w', encoding="utf-8") as file:
+            json.dump(self.all_users, file, ensure_ascii=False, indent=4)
     def setup_ui(self):
         style = ttk.Style()
         style.theme_use("clam")
@@ -70,8 +80,8 @@ class FinanceApp:
 
     def add_money(self):
         amount = self.get_amount()
-        self.data['balance'] += amount
-        save_data(self.data)
+        self.data["balance"] += amount
+        self.save_user_data()
         self.update_balance()
 
     def remove_money(self):
@@ -80,7 +90,7 @@ class FinanceApp:
             messagebox.showerror("ValueError", "Number too big")
             return
         self.data['balance'] -= amount
-        save_data(self.data)
+        self.save_user_data()
         self.update_balance()
 
 class Authenticator:
@@ -107,9 +117,9 @@ class Authenticator:
         if user_entry in users:
             messagebox.showerror("UsersError", "User already exists")
             return
-        else:
-            users[user_entry] = {"password": self.hash_passwords(psw_entry)}
-            self.save_data(users)
+
+        users[user_entry] = {"password": self.hash_passwords(psw_entry), "balance": 0.0}
+        self.save_data(users)
 
     def login(self):
         user_entry = self.username_entry.get().strip()
@@ -133,6 +143,7 @@ class Authenticator:
         return {}
 
     def save_data(self, data):
+
         with open(USERS_DATA, "w") as f:
             json.dump(data, f, ensure_ascii=False, indent=4)
 
