@@ -5,41 +5,30 @@ from tkinter import ttk
 import json
 import os
 
-DATA_FILE = "data.json"
 USERS_DATA = "users.json"
-
-def load_data():
-    if not os.path.exists(DATA_FILE) or os.stat(DATA_FILE).st_size == 0:
-        return {"balance": 0.0}
-    try:
-        with open(DATA_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except json.JSONDecodeError:
-        return {"balance": 0.0}
-
-def save_data(data):
-    with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
 
 class FinanceApp:
     def __init__(self, root, user):
         self.root = root
-        self.root.title("FinanceApp")
-        self.root.geometry("280x200")
+        self.user = user
+        self.root.title(f"FinanceApp - {self.user}")
+        self.root.geometry("280x230")
         self.root.configure(bg="#2e2e2e")
         self.all_users = self.load_users()
-        self.user = user
         self.data = self.all_users[self.user]
         self.setup_ui()
+
     def load_users(self):
         if os.path.exists(USERS_DATA):
             with open(USERS_DATA, 'r', encoding="utf-8") as file:
                 return json.load(file)
         return {}
+
     def save_user_data(self):
         self.all_users[self.user] = self.data
         with open(USERS_DATA, 'w', encoding="utf-8") as file:
             json.dump(self.all_users, file, ensure_ascii=False, indent=4)
+
     def setup_ui(self):
         style = ttk.Style()
         style.theme_use("clam")
@@ -65,6 +54,9 @@ class FinanceApp:
 
         remove_btn = ttk.Button(buttons_frame, text="Remove", command=self.remove_money)
         remove_btn.grid(row=0, column=1, padx=5)
+
+        logout_btn = ttk.Button(self.root, text="Logout", command=self.logout)
+        logout_btn.pack(pady=(10, 0))
 
         self.update_balance()
 
@@ -93,6 +85,13 @@ class FinanceApp:
         self.save_user_data()
         self.update_balance()
 
+    def logout(self):
+        self.all_users.pop("last_logged_in", None)
+        with open(USERS_DATA, 'w', encoding="utf-8") as file:
+            json.dump(self.all_users, file, ensure_ascii=False, indent=4)
+        self.root.destroy()
+        launch_authenticator()
+
 class Authenticator:
     def __init__(self, root):
         self.root = root
@@ -103,10 +102,11 @@ class Authenticator:
         self.username_entry = ttk.Entry(self.frame)
         self.username_entry.grid(row=0, column=1)
         ttk.Label(self.frame, text="Password").grid(row=1, column=0, sticky="e")
-        self.password_entry = ttk.Entry(self.frame)
+        self.password_entry = ttk.Entry(self.frame, show="*")
         self.password_entry.grid(row=1, column=1)
         ttk.Button(self.frame, text="Login", command=self.login).grid(row=2, column=0)
         ttk.Button(self.frame, text="Register", command=self.register).grid(row=2, column=1)
+
     def register(self):
         user_entry = self.username_entry.get().strip()
         psw_entry = self.password_entry.get().strip()
@@ -117,7 +117,6 @@ class Authenticator:
         if user_entry in users:
             messagebox.showerror("UsersError", "User already exists")
             return
-
         users[user_entry] = {"password": self.hash_passwords(psw_entry), "balance": 0.0}
         self.save_data(users)
 
@@ -129,26 +128,42 @@ class Authenticator:
             return
         users = self.load_users()
         if user_entry in users and users[user_entry]["password"] == self.hash_passwords(psw_entry):
+            users["last_logged_in"] = user_entry
+            self.save_data(users)
             self.frame.destroy()
             FinanceApp(self.root, user_entry)
         else:
-            messagebox.showerror("UserError", "User doesn't exist")
+            messagebox.showerror("UserError", "User doesn't exist or password incorrect")
 
     def hash_passwords(self, password):
         return hashlib.sha256(password.encode()).hexdigest()
+
     def load_users(self):
         if os.path.exists(USERS_DATA):
-            with open(USERS_DATA, "r") as f:
+            with open(USERS_DATA, "r", encoding="utf-8") as f:
                 return json.load(f)
         return {}
 
     def save_data(self, data):
-
-        with open(USERS_DATA, "w") as f:
+        with open(USERS_DATA, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=4)
 
-
-if __name__ == "__main__":
+def launch_authenticator():
     root = tk.Tk()
     Authenticator(root)
     root.mainloop()
+
+def main():
+    if os.path.exists(USERS_DATA):
+        with open(USERS_DATA, 'r', encoding="utf-8") as f:
+            users = json.load(f)
+        last_user = users.get("last_logged_in")
+        if last_user and last_user in users:
+            root = tk.Tk()
+            FinanceApp(root, last_user)
+            root.mainloop()
+            return
+    launch_authenticator()
+
+if __name__ == "__main__":
+    main()
