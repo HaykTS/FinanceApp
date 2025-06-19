@@ -55,8 +55,10 @@ class FinanceApp:
         remove_btn = ttk.Button(buttons_frame, text="Remove", command=self.remove_money)
         remove_btn.grid(row=0, column=1, padx=5)
 
+############################################
         logout_btn = ttk.Button(self.root, text="Logout", command=self.logout)
         logout_btn.pack(pady=(10, 0))
+############################################
 
         self.update_balance()
 
@@ -85,12 +87,14 @@ class FinanceApp:
         self.save_user_data()
         self.update_balance()
 
+######################################
     def logout(self):
         self.all_users.pop("last_logged_in", None)
         with open(USERS_DATA, 'w', encoding="utf-8") as file:
             json.dump(self.all_users, file, ensure_ascii=False, indent=4)
         self.root.destroy()
         launch_authenticator()
+#######################################
 
 class Authenticator:
     def __init__(self, root):
@@ -128,7 +132,9 @@ class Authenticator:
             return
         users = self.load_users()
         if user_entry in users and users[user_entry]["password"] == self.hash_passwords(psw_entry):
+            ####################################
             users["last_logged_in"] = user_entry
+            ####################################
             self.save_data(users)
             self.frame.destroy()
             FinanceApp(self.root, user_entry)
@@ -153,6 +159,7 @@ def launch_authenticator():
     Authenticator(root)
     root.mainloop()
 
+###########################################################
 def main():
     if os.path.exists(USERS_DATA):
         with open(USERS_DATA, 'r', encoding="utf-8") as f:
@@ -164,6 +171,7 @@ def main():
             root.mainloop()
             return
     launch_authenticator()
+###########################################################
 
 if __name__ == "__main__":
     main()
