@@ -4,6 +4,7 @@ from tkinter import messagebox
 from tkinter import ttk
 import json
 import os
+from datetime import datetime
 
 USERS_DATA = "users.json"
 
@@ -12,7 +13,7 @@ class FinanceApp:
         self.root = root
         self.user = user
         self.root.title(f"FinanceApp - {self.user}")
-        self.root.geometry("280x230")
+        self.root.geometry("280x400")
         self.root.configure(bg="#2e2e2e")
         self.all_users = self.load_users()
         self.data = self.all_users[self.user]
@@ -55,11 +56,17 @@ class FinanceApp:
         remove_btn = ttk.Button(buttons_frame, text="Remove", command=self.remove_money)
         remove_btn.grid(row=0, column=1, padx=5)
 
+        self.history_label = ttk.Label(self.root, text="History")
+        self.history_label.pack(pady=5)
+
+        self.history_box = tk.Listbox(self.root, height=5)
+        self.history_box.pack(pady=5, fill="both")
+
 ############################################
         logout_btn = ttk.Button(self.root, text="Logout", command=self.logout)
         logout_btn.pack(pady=(10, 0))
 ############################################
-
+        self.update_history()
         self.update_balance()
 
     def update_balance(self):
@@ -72,11 +79,22 @@ class FinanceApp:
         except ValueError:
             return 0.0
 
+    def update_history(self):
+        self.history_box.delete(0, tk.END)
+        history = self.data.get("history", [])
+        for h in reversed(history[-5:]):
+            self.history_box.insert(tk.END, h)
+
     def add_money(self):
         amount = self.get_amount()
-        self.data["balance"] += amount
-        self.save_user_data()
-        self.update_balance()
+        if amount > 0:
+            self.data["balance"] += amount
+            self.data.setdefault("history", []).append(f"{self.timestamp()} +${amount:.2f}")
+            self.save_user_data()
+            self.update_balance()
+            self.update_history()
+        else:
+            messagebox.showerror("ValueError", "Number less or equal to 0")
 
     def remove_money(self):
         amount = self.get_amount()
@@ -84,9 +102,13 @@ class FinanceApp:
             messagebox.showerror("ValueError", "Number too big")
             return
         self.data['balance'] -= amount
+        self.data.setdefault("history", []).append(f"{self.timestamp()} -${amount:.2f}")
         self.save_user_data()
         self.update_balance()
+        self.update_history()
 
+    def timestamp(self):
+        return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 ######################################
     def logout(self):
         self.all_users.pop("last_logged_in", None)
@@ -114,6 +136,7 @@ class Authenticator:
     def register(self):
         user_entry = self.username_entry.get().strip()
         psw_entry = self.password_entry.get().strip()
+
         if not user_entry or not psw_entry:
             messagebox.showerror("RegisterError", "No text inputed")
             return
@@ -121,7 +144,7 @@ class Authenticator:
         if user_entry in users:
             messagebox.showerror("UsersError", "User already exists")
             return
-        users[user_entry] = {"password": self.hash_passwords(psw_entry), "balance": 0.0}
+        users[user_entry] = {"password": self.hash_passwords(psw_entry), "balance": 0.0, "history": []}
         self.save_data(users)
 
     def login(self):
