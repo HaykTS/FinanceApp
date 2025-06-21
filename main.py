@@ -13,7 +13,7 @@ class FinanceApp:
         self.root = root
         self.user = user
         self.root.title(f"FinanceApp - {self.user}")
-        self.root.geometry("280x400")
+        self.root.geometry("600x400")
         self.root.configure(bg="#2e2e2e")
         self.all_users = self.load_users()
         self.data = self.all_users[self.user]
@@ -33,39 +33,57 @@ class FinanceApp:
     def setup_ui(self):
         style = ttk.Style()
         style.theme_use("clam")
-        style.configure("TLabel", font=("Segoe UI", 14), background="#2e2e2e", foreground="#ffffff")
-        style.configure("TButton", font=("Segoe UI", 11), padding=6, background="#444", foreground="#fff")
-        style.map("TButton",
-                  background=[('active', '#555')],
-                  foreground=[('active', '#fff')])
+        style.configure("TLabel", font=("Segoe UI", 12), background="#2e2e2e", foreground="#ffffff")
+        style.configure("Header.TLabel", font=("Segoe UI", 16, "bold"))
+        style.configure("TButton", font=("Segoe UI", 10), padding=6, background="#444", foreground="#fff")
+        style.map("TButton", background=[('active', '#555')], foreground=[('active', '#fff')])
         style.configure("TEntry", font=("Segoe UI", 11), fieldbackground="#444", foreground="#fff", insertcolor="#fff")
 
-        self.balance_label = ttk.Label(self.root, text="")
-        self.balance_label.pack(pady=(10, 10))
+        greeting = ttk.Label(self.root, text=f"Hello, {self.user}!", style="Header.TLabel")
+        greeting.pack(pady=(10, 5))
+
+        top_frame = tk.Frame(self.root, bg="#2e2e2e")
+        top_frame.pack(pady=5)
+
+        self.balance_label = ttk.Label(top_frame, text="", width=20, anchor="center")
+        self.balance_label.grid(row=0, column=0, padx=5)
+
+        self.income_label = ttk.Label(top_frame, text=f"Incomes: ${self.data.get('income', 0.0):.2f}", width=20,anchor="center")
+        self.income_label.grid(row=0, column=1, padx=5)
+
+        self.expense_label = ttk.Label(top_frame, text=f"Expenses: ${self.data.get('expense', 0.0):.2f}", width=20,anchor="center")
+        self.expense_label.grid(row=0, column=2, padx=5)
+
+        actions_frame = tk.Frame(self.root, bg="#2e2e2e")
+        actions_frame.pack(pady=10)
+
+        ttk.Button(actions_frame, text="Add Income", command=self.add_money).grid(row=0, column=0, padx=5)
+        ttk.Button(actions_frame, text="Add Expense", command=self.remove_money).grid(row=0, column=1, padx=5)
+        ttk.Button(actions_frame, text="Transfer").grid(row=0, column=2, padx=5)
 
         self.amount_entry = ttk.Entry(self.root, justify="center")
         self.amount_entry.pack(pady=5)
         self.amount_entry.insert(0, "0")
 
-        buttons_frame = tk.Frame(self.root, bg="#2e2e2e")
-        buttons_frame.pack(pady=5)
+        bottom_frame = tk.Frame(self.root, bg="#2e2e2e")
+        bottom_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
-        add_btn = ttk.Button(buttons_frame, text="Add", command=self.add_money)
-        add_btn.grid(row=0, column=0, padx=5)
+        left_panel = tk.Frame(bottom_frame, bg="#2e2e2e")
+        left_panel.pack(side="left", expand=True, fill="both")
 
-        remove_btn = ttk.Button(buttons_frame, text="Remove", command=self.remove_money)
-        remove_btn.grid(row=0, column=1, padx=5)
+        right_panel = tk.Frame(bottom_frame, bg="#2e2e2e")
+        right_panel.pack(side="right", expand=True, fill="both")
 
-        self.history_label = ttk.Label(self.root, text="History")
-        self.history_label.pack(pady=5)
+        ttk.Label(left_panel, text="Expenses by category").pack(pady=(0, 5))
+        ttk.Label(left_panel, text="(Pie chart)", font=("Segoe UI", 10)).pack()
 
-        self.history_box = tk.Listbox(self.root, height=5)
-        self.history_box.pack(pady=5, fill="both")
+        ttk.Label(right_panel, text="Last Transactions").pack(pady=(0, 5))
+        self.history_box = tk.Listbox(right_panel, height=5)
+        self.history_box.pack(fill="both", expand=True)
 
-############################################
         logout_btn = ttk.Button(self.root, text="Logout", command=self.logout)
         logout_btn.pack(pady=(10, 0))
-############################################
+
         self.update_history()
         self.update_balance()
 
