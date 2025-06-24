@@ -1,47 +1,269 @@
 {
     "w": {
         "password": "50e721e49c013f00c62cf59f2163542a9d8df02464efeb615d31051b0fddc326",
-        "balance": 1000.0,
-        "history": [
-            "2025-06-19 20:52:28 +$100.00",
-            "2025-06-19 20:52:34 -$500.00",
-            "2025-06-19 20:52:41 +$500.00",
-            "2025-06-19 20:52:42 -$500.00",
-            "2025-06-19 20:52:43 +$500.00",
-            "2025-06-19 20:53:16 +$500.00",
-            "2025-06-19 20:53:17 -$500.00",
-            "2025-06-19 20:53:17 +$500.00",
-            "2025-06-19 20:54:26 +$100.00",
-            "2025-06-19 20:54:26 +$100.00",
-            "2025-06-19 20:54:28 -$100.00",
-            "2025-06-19 20:54:28 +$100.00",
-            "2025-06-19 20:54:29 +$100.00",
-            "2025-06-19 20:54:30 +$100.00",
-            "2025-06-19 20:54:41 +$100.00",
-            "2025-06-19 20:55:31 +$100.00",
-            "2025-06-19 20:55:35 -$600.00",
-            "2025-06-19 20:55:35 -$600.00",
-            "2025-06-19 20:55:36 +$600.00",
-            "2025-06-19 20:55:37 -$600.00"
-        ]
-    },
-    "h": {
-        "password": "aaa9402664f1a41f40ebbc52c9993eb66aeb366602958fdfaa283b71e64db123",
         "balance": 0.0,
         "history": [
-            "2025-06-19 20:58:38 +$100.00",
-            "2025-06-19 20:58:40 -$100.00",
-            "2025-06-19 20:58:40 +$100.00",
-            "2025-06-19 20:58:40 -$100.00",
-            "2025-06-21 19:55:30 +$100.00",
-            "2025-06-21 19:55:32 -$100.00",
-            "2025-06-21 19:55:36 +$100.00",
-            "2025-06-21 19:55:36 +$100.00",
-            "2025-06-21 19:55:37 +$100.00",
-            "2025-06-21 19:55:38 -$100.00",
-            "2025-06-21 19:55:38 -$100.00",
-            "2025-06-21 19:55:39 -$100.00"
-        ]
+            {
+                "timestamp": "2025-06-21 20:28:06",
+                "amount": 1000.0,
+                "type": "add",
+                "category": "Transportation"
+            },
+            {
+                "timestamp": "2025-06-21 20:28:09",
+                "amount": 1000.0,
+                "type": "add",
+                "category": "Transportation"
+            },
+            {
+                "timestamp": "2025-06-21 20:28:28",
+                "amount": 1000.0,
+                "type": "add",
+                "category": "Transportation"
+            },
+            {
+                "timestamp": "2025-06-21 20:28:39",
+                "amount": 1000.0,
+                "type": "add",
+                "category": "Salary"
+            },
+            {
+                "timestamp": "2025-06-21 20:28:40",
+                "amount": 1000.0,
+                "type": "add",
+                "category": "Salary"
+            },
+            {
+                "timestamp": "2025-06-21 20:29:00",
+                "amount": 5000.0,
+                "type": "remove",
+                "category": "Varks"
+            },
+            {
+                "timestamp": "2025-06-21 20:40:57",
+                "amount": 100.0,
+                "type": "add",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-21 20:41:05",
+                "amount": 100.0,
+                "type": "remove",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-21 20:41:07",
+                "amount": 100.0,
+                "type": "remove",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-21 20:41:08",
+                "amount": 100.0,
+                "type": "remove",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-21 20:41:09",
+                "amount": 100.0,
+                "type": "remove",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-21 20:41:09",
+                "amount": 100.0,
+                "type": "remove",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-21 20:41:10",
+                "amount": 100.0,
+                "type": "remove",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-21 20:41:10",
+                "amount": 100.0,
+                "type": "remove",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-21 20:41:10",
+                "amount": 100.0,
+                "type": "remove",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-21 20:41:11",
+                "amount": 100.0,
+                "type": "remove",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-21 20:41:11",
+                "amount": 100.0,
+                "type": "remove",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-21 20:41:11",
+                "amount": 100.0,
+                "type": "remove",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-21 20:41:16",
+                "amount": 100.0,
+                "type": "add",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-21 20:41:16",
+                "amount": 100.0,
+                "type": "add",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-21 20:41:17",
+                "amount": 100.0,
+                "type": "add",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-21 20:41:17",
+                "amount": 100.0,
+                "type": "remove",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-21 20:41:18",
+                "amount": 100.0,
+                "type": "remove",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-21 20:41:18",
+                "amount": 100.0,
+                "type": "remove",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-21 21:24:02",
+                "amount": 500.0,
+                "type": "add",
+                "category": "Parking"
+            },
+            {
+                "timestamp": "2025-06-21 21:24:12",
+                "amount": 500.0,
+                "type": "remove",
+                "category": "Parking"
+            },
+            {
+                "timestamp": "2025-06-24 19:44:32",
+                "amount": 0,
+                "type": "remove",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-24 19:44:39",
+                "amount": 100.0,
+                "type": "add",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-24 19:44:41",
+                "amount": 100.0,
+                "type": "remove",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-24 19:44:42",
+                "amount": 100.0,
+                "type": "add",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-24 19:44:42",
+                "amount": 100.0,
+                "type": "remove",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-24 19:44:43",
+                "amount": 100.0,
+                "type": "add",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-24 19:44:43",
+                "amount": 100.0,
+                "type": "remove",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-24 19:44:44",
+                "amount": 100.0,
+                "type": "add",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-24 19:44:44",
+                "amount": 100.0,
+                "type": "remove",
+                "category": "Food"
+            },
+            {
+                "timestamp": "2025-06-24 19:44:52",
+                "amount": 100.0,
+                "type": "add",
+                "category": "Transportation"
+            },
+            {
+                "timestamp": "2025-06-24 19:44:52",
+                "amount": 100.0,
+                "type": "remove",
+                "category": "Transportation"
+            },
+            {
+                "timestamp": "2025-06-24 19:44:56",
+                "amount": 1000.0,
+                "type": "add",
+                "category": "Transportation"
+            },
+            {
+                "timestamp": "2025-06-24 19:44:56",
+                "amount": 1000.0,
+                "type": "remove",
+                "category": "Transportation"
+            },
+            {
+                "timestamp": "2025-06-24 19:47:01",
+                "amount": 0,
+                "type": "remove",
+                "category": "Other"
+            },
+            {
+                "timestamp": "2025-06-24 19:47:36",
+                "amount": 0,
+                "type": "remove",
+                "category": "Other"
+            },
+            {
+                "timestamp": "2025-06-24 19:47:38",
+                "amount": 0,
+                "type": "remove",
+                "category": "Other"
+            },
+            {
+                "timestamp": "2025-06-24 20:42:37",
+                "amount": 0,
+                "type": "remove",
+                "category": "Other"
+            }
+        ],
+        "income": 7400.0,
+        "expense": 8400.0
     },
-    "last_logged_in": "h"
+    "last_logged_in": "w"
 }
