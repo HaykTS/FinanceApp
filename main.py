@@ -10,6 +10,7 @@ matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+SESSION_FILE = "current_user.json"
 USERS_DATA = "users.json"
 CURRENT_LANG = "ru"
 LANGUAGES = {
@@ -99,11 +100,46 @@ LANGUAGES = {
 
 def l(key):
     return LANGUAGES[CURRENT_LANG].get(key, key)
+
+def create_lang_selector(parent, callback):
+    frame = ttk.Frame(parent)
+    frame.pack(pady=5)
+
+    ttk.Label(frame, text=l("select_language")).pack(side="left")
+
+    combobox = ttk.Combobox(frame, values=["en", "ru", "hy"], state="readonly")
+    combobox.set(CURRENT_LANG)
+    combobox.pack(padx=5)
+
+    def on_change(event):
+        global CURRENT_LANG
+        CURRENT_LANG = combobox.get()
+        callback()
+
+    combobox.bind("<<ComboboxSelected>>", on_change)
+    return frame
+
+def save_session(username):
+    with open(SESSION_FILE, "w", encoding="utf-8") as f:
+        json.dump({"username": username}, f)
+
+def load_session():
+    if os.path.exists(SESSION_FILE):
+        with open(SESSION_FILE, "r", encoding="utf-8") as f:
+            return json.load(f).get("username")
+    return None
+
+def clear_session():
+    if os.path.exists(SESSION_FILE):
+        os.remove(SESSION_FILE)
+
+
 class FinanceApp:
     def __init__(self, root, user):
         self.root = root
         self.user = user
         self.root.title(f"FinanceApp - {self.user}")
+        create_lang_selector(self.root, lambda: [self.root.destroy(), launch_authenticator()])
         self.root.geometry("800x650")
         self.root.configure(bg="#2e2e2e")
         self.all_users = self.load_users()
@@ -254,8 +290,8 @@ class FinanceApp:
                 expense += d["amount"]
         self.data["income"] = income
         self.data["expense"] = expense
-        self.income_label.config(text=f"Incomes: ${income:.2f}")
-        self.expense_label.config(text=f"Expenses: ${expense:.2f}")
+        self.income_label.config(text=f"{l("income")}: ${income:.2f}")
+        self.expense_label.config(text=f"{l("expense")}: ${expense:.2f}")
 
     def export_csv(self):
         history = self.data.get("history", [])
@@ -344,6 +380,7 @@ class FinanceApp:
         self.all_users.pop("last_logged_in", None)
         with open(USERS_DATA, 'w', encoding="utf-8") as file:
             json.dump(self.all_users, file, ensure_ascii=False, indent=4)
+        clear_session()
         self.root.destroy()
         launch_authenticator()
 
@@ -351,6 +388,7 @@ class Authenticator:
     def __init__(self, root):
         self.root = root
         self.root.title("Authenticate")
+        create_lang_selector(self.root, lambda: [self.root.destroy(), launch_authenticator()])
         self.frame = ttk.Frame(root)
         self.frame.pack(pady=5)
         ttk.Label(self.frame, text="Login").grid(row=0, column=0, sticky="e")
@@ -363,16 +401,7 @@ class Authenticator:
         ttk.Button(self.frame, text="Login", command=self.login).grid(row=2, column=0)
         ttk.Button(self.frame, text="Register", command=self.register).grid(row=2, column=1)
 
-        combobox = ttk.Combobox(self.root, values=["en", "ru", "hy"], state="readonly")
-        combobox.set(CURRENT_LANG)
-        combobox.pack(padx=5)
 
-        def change_language(event):
-            global CURRENT_LANG
-            CURRENT_LANG = combobox.get()
-            self.root.destroy()
-            launch_authenticator()
-        combobox.bind("ComboboxSelected", change_language)
 
 
     def register(self):
@@ -405,7 +434,7 @@ class Authenticator:
         if user_entry in users and users[user_entry]["password"] == self.hash_passwords(psw_entry):
 
             users["last_logged_in"] = user_entry
-
+            save_session(user_entry)
             self.save_data(users)
             self.frame.destroy()
             FinanceApp(self.root, user_entry)
@@ -435,11 +464,13 @@ def main():
         with open(USERS_DATA, 'r', encoding="utf-8") as f:
             users = json.load(f)
         last_user = users.get("last_logged_in")
-        if last_user and last_user in users:
+        if last_user:
             root = tk.Tk()
             FinanceApp(root, last_user)
             root.mainloop()
             return
+
+
     launch_authenticator()
 
 if __name__ == "__main__":
